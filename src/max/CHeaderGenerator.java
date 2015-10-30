@@ -36,9 +36,9 @@ public class CHeaderGenerator {
 
                 if (Pattern.matches(declaration +
                         whiteSpace + "\\(((" + whiteSpace +
-                        declaration + "|void" + whiteSpace + ")?" + "|"
+                        declaration + "|void" + whiteSpace + ")?" + "|("
                         + whiteSpace + declaration + whiteSpace
-                        + "(," + whiteSpace + declaration + whiteSpace + ")*)" +
+                        + "(," + whiteSpace + declaration + whiteSpace + ")*))" +
                         "\\)" + whiteSpace + "\\{", line)) {
 
                     if (!line.contains("main")) {
