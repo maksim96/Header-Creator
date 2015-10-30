@@ -16,48 +16,55 @@ public class CHeaderGenerator {
         File input = new File(fileName + ".c");
 
         PrintWriter writer = null;
-        try {
-            writer = new PrintWriter(fileName + ".h", "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        writer.println("#ifndef __" + fileName + "_H__");
-        writer.println("#define __" + fileName + "_H__");
-        writer.println();
-
         Scanner scanner = null;
         try {
+            writer = new PrintWriter(fileName + ".h", "UTF-8");
+
+            writer.println("#ifndef __" + fileName + "_H__");
+            writer.println("#define __" + fileName + "_H__");
+            writer.println();
+
+
             scanner = new Scanner(input);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        while(scanner.hasNextLine()) {
-            String line = "Hallo hallo(ydsuf fsd_54, asd asd) {";
-
             String javaIdentifier = "\\p{Alpha}(\\w)*(\\*)*";
             String whiteSpace = "\\s*";
             String declaration = javaIdentifier + "\\s+" + javaIdentifier;
 
-            if (Pattern.matches(declaration +
-                    whiteSpace + "\\(((" + whiteSpace +
-                    declaration + whiteSpace + ")?" + "|"
-                    + whiteSpace + declaration + whiteSpace
-                    + "(," + whiteSpace + declaration + whiteSpace + ")*)" +
-                    "\\)" + whiteSpace + "\\{", line)) {
-                if (!line.contains("main")) {
-                    int pos = line.indexOf("{");
-                    line = line.substring(0, pos);
-                    line += ";";
-                    writer.println(line);
-                }
-            }
+            String line;
 
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine();
+
+                if (Pattern.matches(declaration +
+                        whiteSpace + "\\(((" + whiteSpace +
+                        declaration + "|void" + whiteSpace + ")?" + "|"
+                        + whiteSpace + declaration + whiteSpace
+                        + "(," + whiteSpace + declaration + whiteSpace + ")*)" +
+                        "\\)" + whiteSpace + "\\{", line)) {
+
+                    if (!line.contains("main")) {
+
+                        int pos = line.indexOf("{");
+                        line = line.substring(0, pos);
+                        line += ";";
+                        writer.println(line);
+                    }
+                }
+
+
+            }
             writer.println("#endif");
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null)
             writer.close();
+
+            if (scanner != null)
+                scanner.close();
         }
 
     }
