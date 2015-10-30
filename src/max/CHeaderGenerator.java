@@ -19,13 +19,12 @@ public class CHeaderGenerator {
         Scanner scanner = null;
         try {
             writer = new PrintWriter(fileName + ".h", "UTF-8");
+            scanner = new Scanner(input);
 
             writer.println("#ifndef __" + fileName + "_H__");
             writer.println("#define __" + fileName + "_H__");
             writer.println();
 
-
-            scanner = new Scanner(input);
             String javaIdentifier = "\\p{Alpha}(\\w)*(\\*)*";
             String whiteSpace = "\\s*";
             String declaration = javaIdentifier + "\\s+" + javaIdentifier;
@@ -50,9 +49,8 @@ public class CHeaderGenerator {
                         writer.println(line);
                     }
                 }
-
-
             }
+            
             writer.println("#endif");
 
         } catch (FileNotFoundException e) {
